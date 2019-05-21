@@ -1,0 +1,55 @@
+import sqlite3 #sqlite dahil eder
+baglanti = sqlite3.connect("denemedb.db") # tabloya bağlanır
+cursor = baglanti.cursor() # tablo üzerinde işlem yapan imleç
+
+def tabloolustur():
+    cursor.execute("CREATE TABLE IF NOT EXISTS ogrenci(isim TEXT,soyisim TEXT,ders1 TEXT,sinif INT)")
+    baglanti.commit()
+
+def satırekle():
+    cursor.execute("INSERT INTO ogrenci VALUES('Ahmet','Kaplan','Matematik','6')")
+    baglanti.commit()
+    
+def satırekle2(isim,soyisim,ders1,sinif):
+    cursor.execute("INSERT INTO ogrenci VALUES(?,?,?,?)",(isim,soyisim,ders1,sinif))
+    baglanti.commit()
+    
+def tumverial():
+    cursor.execute("Select * From ogrenci")
+    data = cursor.fetchall()
+    for i in data:
+        print(i)
+        
+def secverial():
+    cursor.execute("Select isim,sinif From ogrenci")
+    data = cursor.fetchall()
+    for i in data:
+        print(i)
+def secimliverial(ders,sinifi):
+    cursor.execute("Select * From ogrenci Where ders1 = ? AND sinif = ?",(ders,sinifi))
+    data = cursor.fetchall()
+    for i in data:
+        print(i)
+
+def veriguncelle(guncel,eski):
+    cursor.execute("Update ogrenci set ders1 = ? where ders1 = ?",(guncel,eski))
+    baglanti.commit()
+    
+tabloolustur()
+satırekle2("John","Kennedy","Physics",10)
+''' isim = input("İsim Gir: ")
+soyisim = input ("Soyisim Gir: ")
+ders=input("Ders Ekle: ")
+sinifi = input("Sınıf Ekle: ")
+satırekle2(isim,soyisim,ders,sinifi)'''
+tumverial()
+print("-------------------------------")
+secverial()
+print("------------------------------")
+'''ders=input("İstediğiniz kişinin dersini giriniz: ")
+sınıf = input("İstediğiniz kişinin sınıfını giriniz")
+secimliverial(ders,sınıf) '''
+ders=input("İstediğiniz dersi seçiniz: ")
+guncel=input("Yeni dersi giriniz: ")
+veriguncelle(guncel,ders)
+baglanti.close() # bağlantıyı kapatır
